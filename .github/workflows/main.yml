@@ -1,9 +1,11 @@
-name: Post JSON File
+name: Post JSON File to Two URLs
 
 on:
   push:
     branches:
-      - main  # Runs when you push to main
+      - main  # Runs when pushing to the main branch
+  schedule:
+    - cron: '*/5 * * * *'  # Runs every 5 minutes
   workflow_dispatch:  # Allows manual trigger
 
 jobs:
@@ -13,8 +15,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Send JSON Data
+      - name: Send JSON Data to First URL
         run: |
           curl -X POST "https://:oCOpFKPkSZeKsCstgI48Bg@tandem.autodesk.com/api/v1/timeseries/models/urn:adsk.dtm:lBFGaNe_QP2PV6aQW1IqxQ/streams/AQAAAF8p9JTiFEPhsynm8Cl1XKcAAAAA" \
+               -H "Content-Type: application/json" \
+               -d @stream.json
+
+      - name: Send JSON Data to Second URL
+        run: |
+          curl -X POST "https://:o3nW9sfiRRqm2OBqga44VQ@tandem.autodesk.com/api/v1/timeseries/models/urn:adsk.dtm:lBFGaNe_QP2PV6aQW1IqxQ/streams/AQAAAE9twDaThEwHq70bq1tRBXsAAAAA" \
                -H "Content-Type: application/json" \
                -d @stream.json
